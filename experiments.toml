@@ -1,0 +1,45 @@
+[components]
+model = "model.Model" # This is the Model class in model.py.
+time = "pypfilt.Scalar"
+sampler = "pypfilt.sampler.LatinHypercube"
+summary = "pypfilt.summary.HDF5"
+
+[time]
+start = 0
+until = 100 # This is how long to run the simulation.
+steps_per_unit = 1 # We only want to record the model state once per day.
+summaries_per_unit = 1
+
+[prior]
+# Define the initial model state.
+S_H = { name = "constant", args.value = 999 }
+E_H = { name = "constant", args.value = 1 }
+I_H = { name = "constant", args.value = 0 }
+L_I = { name = "constant", args.value = 10 }
+# Define fixed values for each model parameter.
+# These can be replaced by distributions from which to draw samples.
+b_H = { name = "constant", args.value = 3.9139e-5 }
+d_H = { name = "constant", args.value = 3.9139e-5 }
+c_H = { name = "constant", args.value = 5 }
+p_1 = { name = "constant", args.value = 0.1 }
+alpha_H = { name = "constant", args.value = 0.05882353 }
+r_H = { name = "constant", args.value = 14.3 }
+f_H = { name = "constant", args.value = 106 }
+p_2 = { name = "constant", args.value = 0.1 }
+kappa = { name = "constant", args.value = 1e5 }
+mu_L = { name = "constant", args.value = 0.07142857 }
+
+[filter]
+particles = 1 # This is the number of model simulations to run.
+prng_seed = 2001 # Set the PRNG seed so that results are reproducible.
+history_window = -1 # Record the full history of each simulation.
+results.save_history = true # Return the full history of each simulation.
+
+# Create a scenario by defining a "[scenario.SOME_NAME]" table.
+# Each scenario will inherit the settings above, but you can also define
+# custom settings for any scenario.
+# See https://pypfilt.readthedocs.io/en/latest/getting-started/ for details.
+[scenario.example_experiment]
+prior.S_H = { name = "constant", args.value = 1 }
+prior.E_H = { name = "constant", args.value = 1 }
+prior.I_H = { name = "constant", args.value = 1 }
